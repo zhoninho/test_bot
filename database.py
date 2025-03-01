@@ -23,7 +23,7 @@ async def create_tables():
 
 async def sql_insert_store(name_product, category, size, price, product_id, photo):
     cursor.execute("""
-    INSERT INTO products (name_product, categoty, size, price, product_id, photo)
+    INSERT INTO products (name_product, category, size, price, product_id, photo)
     VALUES (?, ?, ?, ?, ?, ?)
 """, (name_product, category, size, price, product_id, photo))
     db.commit()

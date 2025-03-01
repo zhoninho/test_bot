@@ -88,9 +88,7 @@ async def submit_load(message: types.Message, state: FSMContext):
                     product_id=data['product_id'],
                     photo=data['photo']
                 )
-
                 await message.answer('Ваши данные в базе!')
-
                 await state.finish()
             except Exception as e:
                 await message.answer("Произошла ошибка сохранения данных. Попробуйте снова.")
