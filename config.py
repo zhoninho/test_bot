@@ -6,4 +6,4 @@ token = config('TOKEN')
 bot = Bot(token=token)
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
-staff = ['1595489627']
+staff = [1595489627]

@@ -36,7 +36,7 @@ async def load_size(message: types.Message, state: FSMContext):
 
 async def load_quantity(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        data['contact'] = message.text
+        data['quantity'] = message.text
 
     await OrderFSM.next()
     await message.answer("Введите свои контактные данные (номер телефона): ")

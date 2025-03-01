@@ -1,8 +1,7 @@
 from aiogram import executor
 from config import dp, bot, staff
 from handlers import all_handlers, store_fsm, order_fsm
-
-from db.main_db import create_tables
+from database import create_tables
 
 async def on_startup(_):
     for admin in staff:

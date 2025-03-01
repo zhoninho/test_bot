@@ -3,7 +3,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher import FSMContext
 
-from db import main_db
+import database
 from config import staff
 
 class StoreFSM(StatesGroup):
@@ -15,14 +15,10 @@ class StoreFSM(StatesGroup):
     photo = State()
     submit = State()
 
-async def is_staff(message: types.Message):
-    if message.from_user.id not in staff:
-        await message.answer("У вас нет прав добавлять товар в магазин!")
-        return False
-    return True
 
 async def start_fsm_store(message: types.Message):
-    if not await is_staff(message):
+    if message.from_user.id not in staff:
+        await message.answer("У вас нет прав добавлять товар в магазин!")
         return
     await StoreFSM.name_product.set()
     await message.answer("Напишите название товара: ")
@@ -40,7 +36,7 @@ async def load_category(message: types.Message, state: FSMContext):
         data['category'] = message.text
 
     await StoreFSM.next()
-    await message.answer("Введите цену товара: ")
+    await message.answer("Введите размер товара: ")
 
 
 async def load_size(message: types.Message, state: FSMContext):
@@ -48,7 +44,7 @@ async def load_size(message: types.Message, state: FSMContext):
         data['size'] = message.text
 
     await StoreFSM.next()
-    await message.answer("Введите артикул товара: ")
+    await message.answer("Введите цену товара: ")
 
 
 async def load_price(message: types.Message, state: FSMContext):
@@ -56,7 +52,7 @@ async def load_price(message: types.Message, state: FSMContext):
         data['price'] = message.text
 
     await StoreFSM.next()
-    await message.answer("Введите размер товара: ")
+    await message.answer("Введите артикул товара: ")
 
 
 async def load_product_id(message: types.Message, state: FSMContext):
@@ -64,7 +60,7 @@ async def load_product_id(message: types.Message, state: FSMContext):
         data['product_id'] = message.text
 
     await StoreFSM.next()
-    await message.answer("Отправьте описание товара")
+    await message.answer("Введите фото товара: ")
 
 
 async def load_photo(message: types.Message, state: FSMContext):
@@ -84,8 +80,9 @@ async def submit_load(message: types.Message, state: FSMContext):
     if message.text.lower() == 'да':
         async with state.proxy() as data:
             try:
-                await main_db.sql_insert_store(
+                await database.sql_insert_store(
                     name_product=data['name_product'],
+                    category=data['category'],
                     size=data['size'],
                     price=data['price'],
                     product_id=data['product_id'],

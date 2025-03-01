@@ -1,5 +1,5 @@
 from aiogram import Dispatcher, types
-from db import main_db
+import database
 
 async def start_handler(message: types.Message):
     user = message.from_user
@@ -11,7 +11,7 @@ async def info_handler(message: types.Message):
     )
 
 async def send_products(message: types.Message):
-    products = main_db.fetch_all_products()
+    products = database.fetch_all_products()
     if products:
         for product in products:
 
@@ -33,5 +33,5 @@ async def other_handler(message: types.Message):
 def register_handlers(dp: Dispatcher):
     dp.register_message_handler(start_handler, commands=['start'])
     dp.register_message_handler(info_handler, commands=['info'])
-    dp.register_message_handler(send_products, commands=['send_products'])
+    dp.register_message_handler(send_products, commands=['products'])
     dp.register_message_handler(other_handler)
